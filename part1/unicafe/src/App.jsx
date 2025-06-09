@@ -19,18 +19,18 @@ const Stats = ({ good, neutral, bad }) => {
   const positive = all === 0 ? 0 : (good / all) * 100;
 
   if (all === 0) {
-    return <p>No feedback given</p>;
+    return <p>No Feedback Given</p>;
   }
 
   return (
     <table>
       <tbody>
-        <Result name="good" result={good} />
-        <Result name="neutral" result={neutral} />
-        <Result name="bad" result={bad} />
-        <Result name="all" result={all} />
-        <Result name="average" result={average.toFixed(1)} />
-        <Result name="positive" result={`${positive.toFixed(1)}%`} />
+        <Result name="Good" result={good} />
+        <Result name="Neutral" result={neutral} />
+        <Result name="Bad" result={bad} />
+        <Result name="All" result={all} />
+        <Result name="Average" result={average.toFixed(1)} />
+        <Result name="Positive" result={`${positive.toFixed(1)}%`} />
       </tbody>
     </table>
   );
@@ -50,9 +50,9 @@ const App = () => {
   return (
     <div>
       <Header header="Give Feedback" />
-      <Button type="good" handleClick={handleClick} />
-      <Button type="neutral" handleClick={handleClick} />
-      <Button type="bad" handleClick={handleClick} />
+      <Button type="Good" handleClick={handleClick} />
+      <Button type="Neutral" handleClick={handleClick} />
+      <Button type="Bad" handleClick={handleClick} />
 
       <Header header="Statistics" />
       <Stats good={good} neutral={neutral} bad={bad} />
