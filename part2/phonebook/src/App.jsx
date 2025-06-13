@@ -1,12 +1,7 @@
 import { useState } from "react";
-
-const PersonItem = ({ person }) => {
-  return (
-    <li>
-      {person.name} {person.number}
-    </li>
-  );
-};
+import PersonItem from "./components/PersonItem";
+import FilterInput from "./components/FilterInput";
+import AddContactForm from "./components/AddContactForm";
 
 const App = () => {
   const [contactList, setContactList] = useState([
@@ -14,13 +9,12 @@ const App = () => {
   ]);
   const [inputName, setInputName] = useState("");
   const [inputNumber, setInputNumber] = useState("");
+  const [filterName, setFilterName] = useState("");
 
   const handleAddContact = (event) => {
     event.preventDefault();
-    const newContact = {
-      name: inputName,
-      number: inputNumber,
-    };
+    const newContact = { name: inputName, number: inputNumber };
+
     const isNameExists = contactList.some(
       (person) => person.name === inputName
     );
@@ -40,35 +34,28 @@ const App = () => {
     setInputNumber("");
   };
 
-  const handleNameChange = (event) => {
-    setInputName(event.target.value);
-  };
-
-  const handleNumberChange = (event) => {
-    setInputNumber(event.target.value);
-  };
+  const filteredContacts = contactList.filter((person) =>
+    person.name.toLowerCase().includes(filterName.toLowerCase())
+  );
 
   return (
     <div>
       <h1>Phonebook</h1>
-
-      <form onSubmit={handleAddContact}>
-        <div>
-          Name <input value={inputName} onChange={handleNameChange} />
-        </div>
-        <br />
-        <div>
-          Number: <input value={inputNumber} onChange={handleNumberChange} />
-        </div>
-        <br />
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-
+      <FilterInput
+        filterValue={filterName}
+        onFilterChange={(e) => setFilterName(e.target.value)}
+      />
+      <h2>Add</h2>
+      <AddContactForm
+        inputName={inputName}
+        inputNumber={inputNumber}
+        onNameChange={(e) => setInputName(e.target.value)}
+        onNumberChange={(e) => setInputNumber(e.target.value)}
+        onAddContact={handleAddContact}
+      />
       <h2>Contacts</h2>
       <ul>
-        {contactList.map((person, index) => (
+        {filteredContacts.map((person, index) => (
           <PersonItem key={index} person={person} />
         ))}
       </ul>
