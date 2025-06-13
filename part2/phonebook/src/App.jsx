@@ -1,21 +1,41 @@
 import { useState } from "react";
 
+const PersonItem = ({ person }) => {
+  return <li>{person.name}</li>;
+};
+
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
-  const [newName, setNewName] = useState("");
+  const [contactList, setContactList] = useState([{ name: "Arto Hellas" }]);
+  const [inputName, setInputName] = useState("");
+
+  const handleAddContact = (event) => {
+    event.preventDefault();
+    const newContact = {
+      name: inputName,
+    };
+    setContactList(contactList.concat(newContact));
+    setInputName("");
+  };
+
+  const handleInputChange = (event) => {
+    setInputName(event.target.value);
+  };
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form>
-        <div>
-          name: <input />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
+      <h1>Phonebook</h1>
+
+      <form onSubmit={handleAddContact}>
+        Name <input value={inputName} onChange={handleInputChange} />
+        <button>add</button>
       </form>
-      <h2>Numbers</h2>
+
+      <h2>Contacts</h2>
+      <ul>
+        {contactList.map((person, index) => (
+          <PersonItem key={index} person={person} />
+        ))}
+      </ul>
     </div>
   );
 };
