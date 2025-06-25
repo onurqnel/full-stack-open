@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PersonItem from "./components/PersonItem";
 import FilterInput from "./components/FilterInput";
 import AddContactForm from "./components/AddContactForm";
+import axios from "axios";
 
 const App = () => {
-  const [contactList, setContactList] = useState([
-    { name: "Onur Onel", number: "+1 613 853 1334" },
-  ]);
+  const [contactList, setContactList] = useState([]);
   const [inputName, setInputName] = useState("");
   const [inputNumber, setInputNumber] = useState("");
   const [filterName, setFilterName] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then((response) => {
+        setContactList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const handleAddContact = (event) => {
     event.preventDefault();
