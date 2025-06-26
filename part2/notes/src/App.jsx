@@ -8,7 +8,9 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    noteService.getAll().then((initialNotes) => {
+    noteService
+    .getAll()
+    .then((initialNotes) => {
       setNotes(initialNotes);
     });
   }, []);
@@ -37,7 +39,6 @@ const App = () => {
   };
 
   const handleNoteChange = (event) => {
-    console.log(event.target.value);
     setNewNote(event.target.value);
   };
 
