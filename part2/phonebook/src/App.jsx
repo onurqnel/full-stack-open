@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PersonItem from "./components/PersonItem";
 import FilterInput from "./components/FilterInput";
 import AddContactForm from "./components/AddContactForm";
-import axios from "axios";
+import contactService from "./services/contacts";
 
 const App = () => {
   const [contactList, setContactList] = useState([]);
@@ -11,42 +11,61 @@ const App = () => {
   const [filterName, setFilterName] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => {
-        setContactList(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    contactService.getAll().then((initialContacts) => {
+      setContactList(initialContacts);
+    });
   }, []);
 
   const handleAddContact = (event) => {
     event.preventDefault();
-    const newContact = { name: inputName, number: inputNumber };
-
-    const isNameExists = contactList.some(
+    const existingPerson = contactList.find(
       (person) => person.name === inputName
     );
-    const isNumberExists = contactList.some(
-      (person) => person.number === inputNumber
-    );
 
-    if (isNameExists || isNumberExists) {
-      let message = "";
-      if (isNameExists) message += `Name "${inputName}" already exists.\n`;
-      if (isNumberExists) message += `Number "${inputNumber}" already exists.`;
-      return alert(message.trim());
+    const newContact = {
+      name: inputName,
+      number: inputNumber,
+    };
+
+    if (existingPerson) {
+      const confirmReplace = window.confirm(
+        `${inputName} is already in the phonebook. Replace the old number with the new one?`
+      );
+      if (confirmReplace) {
+        const updatedContact = { ...existingPerson, number: inputNumber };
+        contactService
+          .update(existingPerson.id, updatedContact)
+          .then((returnedContact) => {
+            setContactList(
+              contactList.map((person) =>
+                person.id !== existingPerson.id ? person : returnedContact
+              )
+            );
+            setInputName("");
+            setInputNumber("");
+          });
+      }
+      return;
     }
-
-    setContactList(contactList.concat(newContact));
-    setInputName("");
-    setInputNumber("");
+    contactService.create(newContact).then((returnedContact) => {
+      setContactList(contactList.concat(returnedContact));
+      setInputName("");
+      setInputNumber("");
+    });
   };
 
   const filteredContacts = contactList.filter((person) =>
     person.name.toLowerCase().includes(filterName.toLowerCase())
   );
+
+  const deleteOf = (id) => {
+    if (!window.confirm("Are you sure you want to delete this contact?"))
+      return;
+
+    contactService.remove(id).then(() => {
+      setContactList(contactList.filter((c) => c.id !== id));
+    });
+  };
 
   return (
     <div>
@@ -65,8 +84,12 @@ const App = () => {
       />
       <h2>Contacts</h2>
       <ul>
-        {filteredContacts.map((person, index) => (
-          <PersonItem key={index} person={person} />
+        {filteredContacts.map((person) => (
+          <PersonItem
+            key={person.id}
+            person={person}
+            toggleDelete={() => deleteOf(person.id)}
+          />
         ))}
       </ul>
     </div>
