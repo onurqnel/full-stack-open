@@ -5,13 +5,7 @@ const CountryInfo = ({ country }) => {
     <div>
       <h1>{country.name.common}</h1>
       <p>
-        <strong>Capital:</strong> {country.capital?.[0]}
-      </p>
-      <p>
-        <strong>Region:</strong> {country.region}
-      </p>
-      <p>
-        <strong>Population:</strong> {country.population.toLocaleString()}
+        <strong>Capital:</strong> {country.capital}
       </p>
       <h2>Languages</h2>
       <ul>
@@ -20,9 +14,9 @@ const CountryInfo = ({ country }) => {
         ))}
       </ul>
       <img
-        src={country.flags?.png}
+        src={country.flags.png}
         alt={`Flag of ${country.name.common}`}
-        width="120"
+        width="240"
       />
     </div>
   );

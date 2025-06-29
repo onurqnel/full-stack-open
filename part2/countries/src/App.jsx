@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import CountryFinder from "./components/country-finder";
 import CountryList from "./components/country-list";
@@ -25,7 +26,7 @@ const App = () => {
     } else {
       setSelectedCountry(null);
     }
-  }, [filteredCountries]);
+  }, [countryName]);
 
   let countriesToShow = [];
   if (countryName === "") {
