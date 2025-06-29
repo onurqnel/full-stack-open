@@ -7,6 +7,7 @@ import countryService from "./services/countries";
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [newCountry, setNewCountry] = useState("");
+  const [toggleShow, setToggleShow] = useState(false);
 
   useEffect(() => {
     countryService.getAllCountries().then((initialCountries) => {
@@ -18,16 +19,22 @@ const App = () => {
     setNewCountry(event.target.value);
   };
 
+  let countriesToShow;
   const filteredCountries = countries.filter((country) =>
     country.name.common.toLowerCase().includes(newCountry.toLowerCase())
   );
+  if (newCountry === "") {
+    countriesToShow = [];
+  } else if (filteredCountries.length > 10) {
+    countriesToShow = "Too many matches, please specify another filter.";
+  } else {
+    countriesToShow = filteredCountries;
+  }
 
-  const countriesToShow =
-    newCountry === ""
-      ? []
-      : filteredCountries.length > 10
-      ? "Too many matches, please specify another filter."
-      : filteredCountries;
+  const handleToggleShow = () => {
+    setToggleShow(true);
+    console.log("Button Clicked");
+  };
 
   return (
     <>
@@ -35,7 +42,7 @@ const App = () => {
         countryValue={newCountry}
         onCountryChange={handleCountryChange}
       />
-      <CountryList />
+      <CountryList countries={countriesToShow} toggleShow={handleToggleShow} />
       <CountryInfo />
     </>
   );

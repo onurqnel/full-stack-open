@@ -1,4 +1,4 @@
-const Finder = ({ countryValue, onCountryChange }) => {
+const CountryFinder = ({ countryValue, onCountryChange }) => {
   return (
     <div>
       <input value={countryValue} onChange={onCountryChange} />
@@ -6,4 +6,4 @@ const Finder = ({ countryValue, onCountryChange }) => {
   );
 };
 
-export default Finder;
+export default CountryFinder;

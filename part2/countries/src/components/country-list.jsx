@@ -1,12 +1,12 @@
-const Countries = ({ country, toggleShow }) => {
+const CountryList = ({ countries, toggleShow }) => {
   return (
     <div>
       <li>
-        {country.name}&nbsp;
+        {countries.name}&nbsp;
         <button onClick={toggleShow}>Show</button>
       </li>
     </div>
   );
 };
 
-export default Countries;
+export default CountryList;

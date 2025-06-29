@@ -1,5 +1,9 @@
-const Info = () => {
-  return <> </>;
+const CountryInfo = () => {
+  return (
+    <div>
+
+    </div>
+  )
 };
 
-export default Info;
+export default CountryInfo;
