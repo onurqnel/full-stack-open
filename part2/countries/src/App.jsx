@@ -6,8 +6,8 @@ import countryService from "./services/countries";
 
 const App = () => {
   const [countries, setCountries] = useState([]);
-  const [newCountry, setNewCountry] = useState("");
-  const [toggleShow, setToggleShow] = useState(false);
+  const [countryName, setCountryName] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   useEffect(() => {
     countryService.getAllCountries().then((initialCountries) => {
@@ -15,35 +15,44 @@ const App = () => {
     });
   }, []);
 
-  const handleCountryChange = (event) => {
-    setNewCountry(event.target.value);
-  };
-
-  let countriesToShow;
   const filteredCountries = countries.filter((country) =>
-    country.name.common.toLowerCase().includes(newCountry.toLowerCase())
+    country.name.common.toLowerCase().includes(countryName.toLowerCase())
   );
-  if (newCountry === "") {
+
+  useEffect(() => {
+    if (filteredCountries.length === 1) {
+      setSelectedCountry(filteredCountries[0]);
+    } else {
+      setSelectedCountry(null);
+    }
+  }, [filteredCountries]);
+
+  let countriesToShow = [];
+  if (countryName === "") {
     countriesToShow = [];
   } else if (filteredCountries.length > 10) {
-    countriesToShow = "Too many matches, please specify another filter.";
+    countriesToShow = "Too many matches, please specify filter.";
   } else {
     countriesToShow = filteredCountries;
   }
 
-  const handleToggleShow = () => {
-    setToggleShow(true);
-    console.log("Button Clicked");
+  const handleToggleShow = (country) => {
+    setSelectedCountry(country);
   };
 
   return (
     <>
       <CountryFinder
-        countryValue={newCountry}
-        onCountryChange={handleCountryChange}
+        countryValue={countryName}
+        onCountryChange={(event) => setCountryName(event.target.value)}
       />
-      <CountryList countries={countriesToShow} toggleShow={handleToggleShow} />
-      <CountryInfo />
+      {filteredCountries.length > 1 && (
+        <CountryList
+          countries={countriesToShow}
+          toggleShow={handleToggleShow}
+        />
+      )}
+      {<CountryInfo country={selectedCountry} />}
     </>
   );
 };

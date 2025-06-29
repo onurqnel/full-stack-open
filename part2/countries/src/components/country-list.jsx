@@ -1,11 +1,17 @@
 const CountryList = ({ countries, toggleShow }) => {
+  if (typeof countries === "string") {
+    return <p>{countries}</p>;
+  }
+
   return (
-    <div>
-      <li>
-        {countries.name}&nbsp;
-        <button onClick={toggleShow}>Show</button>
-      </li>
-    </div>
+    <ul>
+      {countries.map((country) => (
+        <li key={country.cca3}>
+          {country.name.common} &nbsp;
+          <button onClick={() => toggleShow(country)}>Show</button>
+        </li>
+      ))}
+    </ul>
   );
 };
 
