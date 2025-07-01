@@ -1,7 +1,10 @@
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
 
 app.use(express.json());
+app.use(morgan("dev"));
 
 let persons = [
   { id: "1", name: "Arto Hellas", number: "040-123456" },
@@ -29,6 +32,7 @@ app.get("/api/person/:id", (request, response) => {
   } else {
     response.status(404).end();
   }
+  ``;
 });
 
 app.delete("/api/person/:id", (request, response) => {
