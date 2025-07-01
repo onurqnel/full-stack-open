@@ -9,7 +9,7 @@ app.use(express.json());
 let notes = [
   {
     id: "1",
-    content: "HTML is easy",
+    content: "HTML is easyyyy",
     important: true,
   },
   {
