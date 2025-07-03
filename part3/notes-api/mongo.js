@@ -5,9 +5,6 @@ const username = process.env.MONGODB_USERNAME;
 const password = encodeURIComponent(process.env.MONGODB_PASSWORD);
 
 const url = `mongodb+srv://${username}:${password}@cluster0.4smbkro.mongodb.net/noteApp?retryWrites=true&w=majority`;
-
-console.log("Şifre:", process.env.MONGODB_PASSWORD);
-
 mongoose.set("strictQuery", false);
 
 mongoose.connect(url);
