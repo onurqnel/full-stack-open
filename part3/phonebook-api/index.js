@@ -15,9 +15,9 @@ app.get("/api/person", (request, response) => {
 
 app.get("/info", (request, response) => {
   const now = new Date();
-  response.send(
-    `<p>Phonebook has info for ${Contact.length} people <br> ${now}</p>`
-  );
+  Contact.countDocuments().then((count) => {
+    response.send(`<p>Phonebook has info for ${count} people <br> ${now}</p>`);
+  });
 });
 
 app.get("/api/person/:id", (request, response) => {
@@ -28,14 +28,13 @@ app.get("/api/person/:id", (request, response) => {
 
 app.post("/api/person", (request, response) => {
   const body = request.body;
-
-  if (!body.content) {
-    return response.status(400).json({ error: "content missing" });
+  if (!body.name || !body.number) {
+    return response.status(400).json({ error: "name or number missing" });
   }
 
   const contact = new Contact({
-    name: contactName,
-    number: contactNumber,
+    name: body.name,
+    number: body.number,
   });
 
   contact.save().then((savedContact) => {
